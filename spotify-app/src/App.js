@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { getAuthUrl } from "./services/spotifyApi";
+import Home from "./pages/Home";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+const App = () => {
+  const [token, setToken] = useState(null);
+
+  const handleLogin = () => {
+    window.location.href = getAuthUrl();
+  };
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.replace("#", ""));
+      setToken(params.get("access_token"));
+    }
+  }, []);
+
+  if (!token) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <button
+          onClick={handleLogin}
+          className="bg-green-500 text-white px-6 py-3 rounded"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+          Iniciar sesión con Spotify
+        </button>
+      </div>
+    );
+  }
+
+  return <Home token={token} />;
+};
 
 export default App;
