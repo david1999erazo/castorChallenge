@@ -11,9 +11,9 @@ export const getAuthUrl = () => {
   return url.toString();
 };
 
-export const searchSpotify = async (query, token) => {
+export const searchSpotify = async (query, token, limit = 30, offset = 0) => {
   const response = await fetch(
-    `https://api.spotify.com/v1/search?q=${query}&type=track,artist,album`,
+    `https://api.spotify.com/v1/search?q=${query}&type=track,artist,album&limit=${limit}&offset=${offset}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

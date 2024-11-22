@@ -11,7 +11,11 @@ const SearchForm = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form
+      onSubmit={handleSubmit}
+      className="flex gap-2 justify-center items-center max-w-md w-full mx-auto"
+    >
+      <i className="fab fa-spotify text-green-500 text-3xl"></i>
       <input
         type="text"
         placeholder="Buscar canciones, artistas o álbumes..."
