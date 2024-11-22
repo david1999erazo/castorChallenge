@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { getAuthUrl } from "./services/spotifyApi";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import DetailPage from "./pages/DetailPage";
+import { getAuthUrl } from "./services/spotifyApi";
 
 const App = () => {
-  const [token, setToken] = useState(localStorage.getItem("spotify_token"));
-
-  const handleLogin = () => {
-    window.location.href = getAuthUrl();
-  };
+  const [token, setToken] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
-      const params = new URLSearchParams(hash.replace("#", ""));
+      const params = new URLSearchParams(hash.substring(1));
       const accessToken = params.get("access_token");
       if (accessToken) {
-        localStorage.setItem("spotify_token", accessToken); // Guardar token
         setToken(accessToken);
-        window.location.hash = ""; // Limpiar el hash de la URL
+        window.history.replaceState({}, document.title, "/");
+        navigate("/");
       }
     }
-  }, []);
+  }, [navigate]);
+
+  const handleLogin = () => {
+    const authUrl = getAuthUrl();
+    window.location.href = authUrl;
+  };
 
   if (!token) {
     return (
@@ -38,12 +40,10 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home token={token} />} />
-        <Route path="/details/:id" element={<DetailPage token={token} />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home token={token} />} />
+      <Route path="/details/:id" element={<DetailPage token={token} />} />
+    </Routes>
   );
 };
 
