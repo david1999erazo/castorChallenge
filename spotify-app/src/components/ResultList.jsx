@@ -6,7 +6,7 @@ const ResultsList = ({ results }) => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
       {results.map((item) => (
         <Link
-          to={`/details/${item.id}`} // Redirige a la página de detalles con el id de la canción
+          to={`/details/${item.id}`}
           key={item.id}
           className="p-4 border rounded"
         >

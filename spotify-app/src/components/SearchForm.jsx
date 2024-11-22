@@ -5,7 +5,9 @@ const SearchForm = ({ onSearch }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(query);
+    if (query) {
+      onSearch(query);
+    }
   };
 
   return (
